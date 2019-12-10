@@ -139,7 +139,7 @@ def orderAsteroidsByGradient(origin, potentials):
         relativeList.append(L)
     for key in sorted(QNP, reverse=True):
         relativeList.append(QNP[key])
-    print("Asteroid 200 at " + str(makeNormal(origin, relativeList[199])[0]*100+makeNormal(origin, relativeList[199])[1]))
+    print(makeNormal(origin, relativeList[199])[0]*100+makeNormal(origin, relativeList[199])[1])
 
 def makeNormal(origin, relative):
     return [origin[0]+relative[0], origin[1]-relative[1]]
