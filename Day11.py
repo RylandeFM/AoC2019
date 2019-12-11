@@ -123,7 +123,7 @@ def visualizePaintedSquares():
             borders[1] = max(borders[1], coord[0])
             borders[2] = min(borders[2], coord[1])
             borders[3] = max(borders[3], coord[1])
-    image = [[' ' for j in range(abs(borders[1]-borders[0])+1)] for i in range(abs(borders[3]-borders[2])+1)]
+    image = [[' ' for j in range(borders[0], borders[1]+1)] for i in range(borders[2], borders[3]+1)]
     for square in squaresToPaint:
         image[abs(square[1])][square[0]] = "#"
     printImage(image)
