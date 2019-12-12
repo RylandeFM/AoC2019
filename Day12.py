@@ -68,8 +68,8 @@ def partTwo():
         coord = getCoordinates(2)
         if coord in Zs:
             periodZ = steps
-    lcm_xy = (periodX * periodY) // math.gcd(periodX, periodY)
-    lcm = (lcm_xy * periodZ) // math.gcd(lcm_xy, periodZ)
+    lcmXY = (periodX * periodY)//math.gcd(periodX, periodY)
+    lcm = (lcmXY * periodZ)//math.gcd(lcmXY, periodZ)
     print(lcm)
 
 parseInput()
