@@ -3,6 +3,7 @@ program = open("Day13Input.txt").read()
 tiles = {}
 ball = ()
 paddle = ()
+score = 0
 
 def readProgram(programString):
     programList = programString.split(',')
@@ -11,15 +12,16 @@ def readProgram(programString):
         memory[index] = programList[index]
     return memory
 
-def computeProgram():
+def computeProgram(input):
     #initialize variables
+    global score
     index = 0
     relativeIndex = 0
     programArray = readProgram(program)
     currentTile = [0] * 3
     tileIndex = 0
 
-    programArray[0] = 2
+    programArray[0] = input
     while int(programArray[index]) != 99:
         opcode = str(programArray[index]).zfill(5)
         if int(opcode[2]) == 1:
@@ -67,7 +69,7 @@ def computeProgram():
             tileIndex += 1
             if tileIndex % 3 == 0:
                 if currentTile[0] == -1 and currentTile[1] == 0:
-                    print(currentTile[2])
+                    score = currentTile[2]
                 else:
                     if currentTile[2] == 3:
                         paddle = (currentTile[0], currentTile[1])
@@ -107,5 +109,7 @@ def partOne():
             counter += 1
     print(counter)
 
-computeProgram()
-#partOne()
+computeProgram(1)
+partOne()
+computeProgram(2)
+print(score)
