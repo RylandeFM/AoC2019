@@ -17,7 +17,7 @@ def parseInput():
 
 def findClosestMultiplier(amount, multiplier, realNumber):
     if realNumber:
-        return amount/multiplier, ((amount/multiplier)*multiplier)-amount
+        return amount / multiplier, ((amount / multiplier) * multiplier) - amount
     else:
         return math.ceil(amount / multiplier), (math.ceil(amount / multiplier) * multiplier) - amount
 
@@ -25,7 +25,7 @@ def findClosestMultiplier(amount, multiplier, realNumber):
 def makeItem(what, multiplier):
     output = []
     for item in reactions[what][1]:
-        output.append([item[0], item[1]*multiplier])
+        output.append([item[0], item[1] * multiplier])
     return output
 
 def findElements(what, amount, realNumber):
@@ -75,16 +75,7 @@ def partOne():
     print(findElements("FUEL", 1, False))
 
 def partTwo(oreInHold):
-    oneRun = findElements("FUEL", 1, True)
-    oreLeft = oreInHold - oneRun
-    #add one because we already did one run
-    fuelProduced = math.floor(oreLeft / oneRun) + 1
-    oreLeft -= findElements("FUEL", math.floor(oreLeft/oneRun), True)
-    while oreLeft > 0:
-        oreLeft -= findElements("FUEL", 1, True)
-        if oreLeft > 0:
-            fuelProduced += 1
-    print(fuelProduced)
+    print(math.floor(oreInHold/findElements("FUEL", 1, True)))
 
 parseInput()
 partOne()
