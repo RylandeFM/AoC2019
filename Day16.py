@@ -1,4 +1,3 @@
-import time
 inputString = open("Day16Input.txt").read()
 # inputString = "80871224585914546619083218645595"
 inputList = []
