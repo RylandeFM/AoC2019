@@ -1,39 +1,32 @@
 inputString = open("Day16Input.txt").read()
-#inputString = "19617804207202209144916044189917"
+#inputString = "80871224585914546619083218645595"
 inputList = []
 basePattern = [0, 1, 0, -1]
 
 for c in inputString:
     inputList.append(int(c))
 
-def expandPattern(multiplier):
-    newPattern = []
-    currentStep = 0
-    currentAdd = 0
-    for i in range(len(inputList)+1):
-        newPattern.append(basePattern[currentStep % len(basePattern)])
-        currentAdd += 1
-        if currentAdd == multiplier:
-            currentAdd = 0
-            currentStep += 1
-    newPattern = newPattern[1:]
-    return newPattern
-
-def applyPattern(input, pattern):
+def calcNewSum(position):
+    offset = position
+    step = position + 1
     output = 0
-    for i in range(len(input)):
-        output += input[i] * pattern[i]
-    return int(str(output)[len(str(output))-1:])
+    while offset < len(inputList):
+        output += sum(inputList[offset:offset + step])
+        offset += 2 * step
+
+        output -= sum(inputList[offset:offset + step])
+        offset += 2 * step
+    return abs(output) % 10
 
 def processPhase():
     global inputList
     newList = []
-    for i in range(1, len(inputString)+1):
-        newList.append(applyPattern(inputList, expandPattern(i)))
+    for i in range(len(inputString)):
+        newList.append(calcNewSum(i))
     inputList = newList
 
 def runPhases(repeats):
-    for j in range(repeats):
+    for _ in range(repeats):
         processPhase()
 
 runPhases(100)
