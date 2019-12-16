@@ -3,8 +3,11 @@ inputString = open("Day16Input.txt").read()
 inputList = []
 basePattern = [0, 1, 0, -1]
 
-for c in inputString:
-    inputList.append(int(c))
+def parseInput():
+    global inputList
+    inputList = []
+    for c in inputString:
+        inputList.append(int(c))
 
 def calcNewSum(position):
     offset = position
@@ -18,16 +21,37 @@ def calcNewSum(position):
         offset += 2 * step
     return abs(output) % 10
 
-def processPhase():
+def runPartialPhase(repeats):
     global inputList
-    newList = []
-    for i in range(len(inputString)):
-        newList.append(calcNewSum(i))
-    inputList = newList
+    length = len(inputList)
+    for _ in range(repeats):
+        newList = [0] * length
+        newList[length-1] = inputList[length-1]
+        for i in range(length - 2, length // 2, -1):
+            dataElement = inputList[i]
+            result = dataElement + newList[i + 1]
+            newList[i] = result % 10
+        inputList = newList
 
 def runPhases(repeats):
+    global inputList
     for _ in range(repeats):
-        processPhase()
+        newList = []
+        for i in range(len(inputString)):
+            newList.append(calcNewSum(i))
+        inputList = newList
 
-runPhases(100)
-print("".join(str(x) for x in inputList[:8]))
+def partOne():
+    parseInput()
+    runPhases(100)
+    print("".join(str(x) for x in inputList[:8]))
+
+def partTwo():
+    global inputList
+    parseInput()
+    offset = int(inputString[:7])
+    inputList = inputList * 10000
+    runPartialPhase(100)
+    print("".join(str(x) for x in inputList[offset:offset+8]))
+
+partTwo()
