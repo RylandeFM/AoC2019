@@ -56,11 +56,5 @@ def partTwo():
     runPartialPhase(100, offset)
     print("".join(str(x) for x in inputList[offset:offset + 8]))
 
-start = time.perf_counter()
 partOne()
-end = time.perf_counter()
-print(str(end-start))
-start = time.perf_counter()
 partTwo()
-end = time.perf_counter()
-print(str(end-start))
