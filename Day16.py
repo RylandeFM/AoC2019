@@ -1,5 +1,6 @@
+import time
 inputString = open("Day16Input.txt").read()
-#inputString = "80871224585914546619083218645595"
+# inputString = "80871224585914546619083218645595"
 inputList = []
 basePattern = [0, 1, 0, -1]
 
@@ -21,16 +22,17 @@ def calcNewSum(position):
         offset += 2 * step
     return abs(output) % 10
 
-def runPartialPhase(repeats):
+def runPartialPhase(repeats, offset):
     global inputList
     length = len(inputList)
     for _ in range(repeats):
         newList = [0] * length
-        newList[length-1] = inputList[length-1]
-        for i in range(length - 2, length // 2, -1):
-            dataElement = inputList[i]
-            result = dataElement + newList[i + 1]
-            newList[i] = result % 10
+        # Last number is only relevant for the last line, others are times 0, last number will never change because of this.
+        newList[length - 1] = inputList[length - 1]
+        # we only need to calculate the last X numbers (in offset) because we ignore first X numbers. X - 1 because base 0
+        for i in range(length - 2, offset-1, -1):
+            # Number at position n-1 is the number found at position n in the new list plus the number at position n-1 in the old list.
+            newList[i] = (inputList[i] + newList[i + 1]) % 10
         inputList = newList
 
 def runPhases(repeats):
@@ -51,7 +53,14 @@ def partTwo():
     parseInput()
     offset = int(inputString[:7])
     inputList = inputList * 10000
-    runPartialPhase(100)
-    print("".join(str(x) for x in inputList[offset:offset+8]))
+    runPartialPhase(100, offset)
+    print("".join(str(x) for x in inputList[offset:offset + 8]))
 
+start = time.perf_counter()
+partOne()
+end = time.perf_counter()
+print(str(end-start))
+start = time.perf_counter()
 partTwo()
+end = time.perf_counter()
+print(str(end-start))
