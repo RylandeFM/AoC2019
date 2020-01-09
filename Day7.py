@@ -2,31 +2,31 @@ import itertools
 import threading
 import time
 
-program = open("Day7Input.txt").read().splitlines()
+program = open("Day7Input.txt").read()
 #program = ["3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10"]
 inputs = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
 
 def computeProgram(inputID, outputID):
     currentInput = 0
-    programArray = program[0].split(",")
+    memory = [int(i) for i in program.split(",")]
     index = 0
-    while int(programArray[index]) != 99:
-        opcode = str(programArray[index]).zfill(5)
-        n1 = int(programArray[index + 1]) if int(opcode[2]) == 1 else int(programArray[int(programArray[index + 1])])
+    while memory[index] != 99:
+        opcode = str(memory[index]).zfill(5)
+        n1 = memory[index + 1] if int(opcode[2]) == 1 else memory[memory[index + 1]]
         if int(opcode[4]) != 4 and int(opcode[4]) != 3:
-            n2: int = int(programArray[index + 2]) if int(opcode[1]) == 1 else int(programArray[int(programArray[index + 2])])
+            n2 = memory[index + 2] if int(opcode[1]) == 1 else memory[memory[index + 2]]
 
         if int(opcode[4]) == 1:
-            programArray[int(programArray[index+3])] = n1 + n2
+            memory[memory[index+3]] = n1 + n2
             index += 4
         elif int(opcode[4]) == 2:
-            programArray[int(programArray[index+3])] = n1 * n2
+            memory[memory[index+3]] = n1 * n2
             index += 4
         elif int(opcode[4]) == 3:
             #If input not yet known, wait for it
             while inputs[inputID][0] != currentInput:
                 time.sleep(0.001)
-            programArray[int(programArray[index+1])] = inputs[inputID][1]
+            memory[memory[index+1]] = inputs[inputID][1]
             index += 2
             currentInput += 1
         elif int(opcode[4]) == 4:
@@ -37,10 +37,10 @@ def computeProgram(inputID, outputID):
         elif int(opcode[4]) == 6:
             index = n2 if n1 == 0 else index + 3
         elif int(opcode[4]) == 7:
-            programArray[int(programArray[index + 3])] = 1 if n1 < n2 else 0
+            memory[memory[index + 3]] = 1 if n1 < n2 else 0
             index += 4
         elif int(opcode[4]) == 8:
-            programArray[int(programArray[index + 3])] = 1 if n1 == n2 else 0
+            memory[memory[index + 3]] = 1 if n1 == n2 else 0
             index += 4
         else:
             print("error")
