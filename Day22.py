@@ -18,7 +18,6 @@ def modifyDeck(technique):
             currentPos += increment
         deck = newDeck
 
-
 def partOne():
     for techinque in inputString:
         modifyDeck(techinque)
