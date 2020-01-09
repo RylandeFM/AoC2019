@@ -10,7 +10,7 @@ def readProgram(programString):
     programList = programString.split(',')
     memory = {}
     for index in range(len(programList)):
-        memory[index] = programList[index]
+        memory[index] = int(programList[index])
     return memory
 
 def computeProgram(baseColor):
@@ -21,36 +21,38 @@ def computeProgram(baseColor):
     index = 0
     relativeIndex = 0
     currentOutput = 0
-    programArray = readProgram(program)
+    memory = readProgram(program)
 
-    while int(programArray[index]) != 99:
-        opcode = str(programArray[index]).zfill(5)
+    while memory[index] != 99:
+        opcode = str(memory[index]).zfill(5)
         if int(opcode[2]) == 1:
-            n1 = 0 if index + 1 not in programArray.keys() else int(programArray[index + 1])
+            n1 = 0 if index + 1 not in memory.keys() else memory[index + 1]
         elif int(opcode[2]) == 0:
-            n1 = 0 if int(programArray[index + 1]) not in programArray.keys() else int(programArray[int(programArray[index + 1])])
+            n1 = 0 if memory[index + 1] not in memory.keys() else memory[memory[index + 1]]
         else:
-            n1 = 0 if int(programArray[index + 1]) + relativeIndex not in programArray.keys() else int(programArray[int(programArray[index + 1]) + relativeIndex])
+            n1 = 0 if memory[index + 1] + relativeIndex not in memory.keys() else memory[
+                memory[index + 1] + relativeIndex]
 
         if int(opcode[4]) != 4 and int(opcode[4]) != 3 and int(opcode[4]) != 9:
             if int(opcode[1]) == 1:
-                n2 = 0 if index + 2 not in programArray.keys() else int(programArray[index + 2])
+                n2 = 0 if index + 2 not in memory.keys() else memory[index + 2]
             elif int(opcode[1]) == 0:
-                n2 = 0 if int(programArray[index + 2]) not in programArray.keys() else int(programArray[int(programArray[index + 2])])
+                n2 = 0 if memory[index + 2] not in memory.keys() else memory[memory[index + 2]]
             else:
-                n2 = 0 if int(programArray[index + 2]) + relativeIndex not in programArray.keys() else int(programArray[int(programArray[index + 2]) + relativeIndex])
+                n2 = 0 if memory[index + 2] + relativeIndex not in memory.keys() else memory[
+                    memory[index + 2] + relativeIndex]
 
         if int(opcode[4]) == 1:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = n1 + n2
+                memory[memory[index + 3] + relativeIndex] = n1 + n2
             else:
-                programArray[int(programArray[index+3])] = n1 + n2
+                memory[memory[index + 3]] = n1 + n2
             index += 4
         elif int(opcode[4]) == 2:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = n1 * n2
+                memory[memory[index + 3] + relativeIndex] = n1 * n2
             else:
-                programArray[int(programArray[index+3])] = n1 * n2
+                memory[memory[index + 3]] = n1 * n2
             index += 4
         elif int(opcode[4]) == 3:
             if (currentPosition[0], currentPosition[1]) not in paintedSquares.keys():
@@ -58,9 +60,9 @@ def computeProgram(baseColor):
             else:
                 color = paintedSquares[(currentPosition[0], currentPosition[1])]
             if int(opcode[2]) == 2:
-                programArray[int(programArray[index + 1]) + relativeIndex] = color
+                memory[memory[index + 1] + relativeIndex] = color
             else:
-                programArray[int(programArray[index + 1])] = color
+                memory[memory[index + 1]] = color
             index += 2
         elif int(opcode[4]) == 4:
             output[currentOutput % 2] = n1
@@ -73,15 +75,15 @@ def computeProgram(baseColor):
             index = n2 if n1 == 0 else index + 3
         elif int(opcode[4]) == 7:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = 1 if n1 < n2 else 0
+                memory[memory[index + 3] + relativeIndex] = 1 if n1 < n2 else 0
             else:
-                programArray[int(programArray[index + 3])] = 1 if n1 < n2 else 0
+                memory[memory[index + 3]] = 1 if n1 < n2 else 0
             index += 4
         elif int(opcode[4]) == 8:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = 1 if n1 == n2 else 0
+                memory[memory[index + 3] + relativeIndex] = 1 if n1 == n2 else 0
             else:
-                programArray[int(programArray[index + 3])] = 1 if n1 == n2 else 0
+                memory[memory[index + 3]] = 1 if n1 == n2 else 0
             index += 4
         elif int(opcode[4]) == 9:
             relativeIndex += n1

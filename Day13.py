@@ -3,53 +3,54 @@ program = open("Day13Input.txt").read()
 tiles = {}
 ball = ()
 paddle = ()
-score = 0
 
 def readProgram(programString):
     programList = programString.split(',')
     memory = {}
     for index in range(len(programList)):
-        memory[index] = programList[index]
+        memory[index] = int(programList[index])
     return memory
 
 def computeProgram(input):
     #initialize variables
-    global score
+    score = 0
     index = 0
     relativeIndex = 0
-    programArray = readProgram(program)
+    memory = readProgram(program)
     currentTile = [0] * 3
     tileIndex = 0
 
-    programArray[0] = input
-    while int(programArray[index]) != 99:
-        opcode = str(programArray[index]).zfill(5)
+    memory[0] = input
+    while memory[index] != 99:
+        opcode = str(memory[index]).zfill(5)
         if int(opcode[2]) == 1:
-            n1 = 0 if index + 1 not in programArray.keys() else int(programArray[index + 1])
+            n1 = 0 if index + 1 not in memory.keys() else memory[index + 1]
         elif int(opcode[2]) == 0:
-            n1 = 0 if int(programArray[index + 1]) not in programArray.keys() else int(programArray[int(programArray[index + 1])])
+            n1 = 0 if memory[index + 1] not in memory.keys() else memory[memory[index + 1]]
         else:
-            n1 = 0 if int(programArray[index + 1]) + relativeIndex not in programArray.keys() else int(programArray[int(programArray[index + 1]) + relativeIndex])
+            n1 = 0 if memory[index + 1] + relativeIndex not in memory.keys() else memory[
+                memory[index + 1] + relativeIndex]
 
         if int(opcode[4]) != 4 and int(opcode[4]) != 3 and int(opcode[4]) != 9:
             if int(opcode[1]) == 1:
-                n2 = 0 if index + 2 not in programArray.keys() else int(programArray[index + 2])
+                n2 = 0 if index + 2 not in memory.keys() else memory[index + 2]
             elif int(opcode[1]) == 0:
-                n2 = 0 if int(programArray[index + 2]) not in programArray.keys() else int(programArray[int(programArray[index + 2])])
+                n2 = 0 if memory[index + 2] not in memory.keys() else memory[memory[index + 2]]
             else:
-                n2 = 0 if int(programArray[index + 2]) + relativeIndex not in programArray.keys() else int(programArray[int(programArray[index + 2]) + relativeIndex])
+                n2 = 0 if memory[index + 2] + relativeIndex not in memory.keys() else memory[
+                    memory[index + 2] + relativeIndex]
 
         if int(opcode[4]) == 1:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = n1 + n2
+                memory[memory[index + 3] + relativeIndex] = n1 + n2
             else:
-                programArray[int(programArray[index+3])] = n1 + n2
+                memory[memory[index + 3]] = n1 + n2
             index += 4
         elif int(opcode[4]) == 2:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = n1 * n2
+                memory[memory[index + 3] + relativeIndex] = n1 * n2
             else:
-                programArray[int(programArray[index+3])] = n1 * n2
+                memory[memory[index + 3]] = n1 * n2
             index += 4
         elif int(opcode[4]) == 3:
             if ball[0] > paddle[0]:
@@ -60,9 +61,9 @@ def computeProgram(input):
                 joystickPosition = 0
 
             if int(opcode[2]) == 2:
-                programArray[int(programArray[index + 1]) + relativeIndex] = joystickPosition
+                memory[memory[index + 1] + relativeIndex] = joystickPosition
             else:
-                programArray[int(programArray[index + 1])] = joystickPosition
+                memory[memory[index + 1]] = joystickPosition
             index += 2
         elif int(opcode[4]) == 4:
             currentTile[tileIndex % 3] = n1
@@ -85,15 +86,15 @@ def computeProgram(input):
             index = n2 if n1 == 0 else index + 3
         elif int(opcode[4]) == 7:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = 1 if n1 < n2 else 0
+                memory[memory[index + 3] + relativeIndex] = 1 if n1 < n2 else 0
             else:
-                programArray[int(programArray[index + 3])] = 1 if n1 < n2 else 0
+                memory[memory[index + 3]] = 1 if n1 < n2 else 0
             index += 4
         elif int(opcode[4]) == 8:
             if int(opcode[0]) == 2:
-                programArray[int(programArray[index + 3]) + relativeIndex] = 1 if n1 == n2 else 0
+                memory[memory[index + 3] + relativeIndex] = 1 if n1 == n2 else 0
             else:
-                programArray[int(programArray[index + 3])] = 1 if n1 == n2 else 0
+                memory[memory[index + 3]] = 1 if n1 == n2 else 0
             index += 4
         elif int(opcode[4]) == 9:
             relativeIndex += n1
@@ -101,15 +102,18 @@ def computeProgram(input):
         else:
             print("error")
             return 0
+    return score
 
 def partOne():
+    computeProgram(1)
     counter = 0
     for tile in tiles.values():
         if tile == 2:
             counter += 1
     print(counter)
 
-computeProgram(1)
+def partTwo():
+    print(computeProgram(2))
+
 partOne()
-computeProgram(2)
-print(score)
+partTwo()
