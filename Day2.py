@@ -1,24 +1,28 @@
-inputString = open("Day2Input.txt").read().splitlines()
+inputString = open("Day2Input.txt").read()
 
 def computeString(settingOne, settingTwo):
-    programArray = inputString[0].split(",")
-    programArray[1] = settingOne
-    programArray[2] = settingTwo
+    memory = [int(i) for i in inputString.split(",")]
+    memory[1] = settingOne
+    memory[2] = settingTwo
     index = 0
-    while int(programArray[index]) != 99:
-        if int(programArray[index]) == 1:
-            programArray[int(programArray[index+3])] = int(programArray[int(programArray[index+1])]) + int(programArray[int(programArray[index+2])])
-        elif int(programArray[index]) == 2:
-            programArray[int(programArray[index+3])] = int(programArray[int(programArray[index+1])]) * int(programArray[int(programArray[index+2])])
+    while memory[index] != 99:
+        if memory[index] == 1:
+            memory[memory[index+3]] = memory[memory[index+1]] + memory[memory[index+2]]
+        elif memory[index] == 2:
+            memory[memory[index+3]] = memory[memory[index+1]] * memory[memory[index+2]]
         else:
             print("error")
         index += 4
-    return programArray[0]
+    return memory[0]
 
 print(computeString(12, 2))
 
+resultFound = False
 for noun in range(99):
     for verb in range(99):
         if computeString(noun, verb) == 19690720:
-            print(100*noun+verb)
+            print(100 * noun + verb)
+            resultFound = True
             break
+    if resultFound:
+        break
